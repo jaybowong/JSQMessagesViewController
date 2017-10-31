@@ -218,7 +218,9 @@
 
 - (void)paste:(id)sender
 {
-    if (!self.pasteDelegate || [self.pasteDelegate composerTextView:self shouldPasteWithSender:sender]) {
+    BOOL shouldPaste = [self.pasteDelegate respondsToSelector:@selector(composerTextView:shouldPasteWithSender:)] && [self.pasteDelegate composerTextView:self shouldPasteWithSender:sender];
+    BOOL shouldCallSuper = !self.pasteDelegate || shouldPaste;
+    if (shouldCallSuper) {
         [super paste:sender];
     }
 }
